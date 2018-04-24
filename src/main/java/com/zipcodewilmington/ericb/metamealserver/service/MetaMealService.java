@@ -1,6 +1,7 @@
 package com.zipcodewilmington.ericb.metamealserver.service;
 
 import com.zipcodewilmington.ericb.metamealserver.domain.MetaMealRestaurant;
+import com.zipcodewilmington.ericb.metamealserver.domain.zomato.ZomatoRestaurant;
 import com.zipcodewilmington.ericb.metamealserver.repository.MetaMealRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,10 @@ public class MetaMealService {
         this.zomatoService = zomatoService;
     }
 
-    public List<MetaMealRestaurant> findRestaurants(String city, String state, String cuisine){
-        return null;
+    public List<ZomatoRestaurant> findRestaurants(String city, String state, String cuisine){
+        return zomatoService.getRestaurants(city,state,cuisine);
     }
+
 
 
 }

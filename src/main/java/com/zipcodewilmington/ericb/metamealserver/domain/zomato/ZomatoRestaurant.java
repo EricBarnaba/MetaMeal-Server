@@ -1,5 +1,6 @@
 package com.zipcodewilmington.ericb.metamealserver.domain.zomato;
 
+import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -8,11 +9,14 @@ import javax.persistence.*;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonClassDescription(value = "restaurant")
 public class ZomatoRestaurant {
 
     @Id
-    @GeneratedValue
     private Long id;
+
+    @OneToOne
+    private R r;
 
     private String name;
 
@@ -85,5 +89,13 @@ public class ZomatoRestaurant {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public R getR() {
+        return r;
+    }
+
+    public void setR(R r) {
+        this.r = r;
     }
 }

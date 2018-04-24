@@ -26,6 +26,7 @@ public class MetaMealController {
                                             @PathVariable("cuisine") String cuisine){
        return new ResponseEntity<>(service.findRestaurants(city,state,cuisine), HttpStatus.OK);
    }
-   
+
+
 
 }

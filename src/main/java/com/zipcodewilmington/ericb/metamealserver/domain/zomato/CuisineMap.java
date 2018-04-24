@@ -78,9 +78,13 @@ public class CuisineMap {
         map.put("thai", 95);
         map.put("vegetarian",308);
         map.put("vietnamese",99);
-
-
     }
 
+    public HashMap<String, Integer> getMap() {
+        return map;
+    }
 
+    public void setMap(HashMap<String, Integer> map) {
+        this.map = map;
+    }
 }
