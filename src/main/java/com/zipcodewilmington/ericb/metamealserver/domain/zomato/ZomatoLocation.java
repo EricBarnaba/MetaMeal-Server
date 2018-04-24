@@ -2,8 +2,16 @@ package com.zipcodewilmington.ericb.metamealserver.domain.zomato;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Entity
 public class ZomatoLocation {
+    @Id
+    @GeneratedValue
+    private Long id;
     private String address;
     private String city;
     private double latitude;
@@ -48,5 +56,13 @@ public class ZomatoLocation {
 
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

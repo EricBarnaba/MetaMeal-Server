@@ -2,11 +2,9 @@ package com.zipcodewilmington.ericb.metamealserver.domain.zomato;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.zipcodewilmington.ericb.metamealserver.domain.zomato.ZomatoLocation;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+
+import javax.persistence.*;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -18,12 +16,14 @@ public class ZomatoRestaurant {
 
     private String name;
 
+    @OneToOne
     private ZomatoLocation location;
 
     @JsonProperty(value = "average_cost_for_two")
     private Integer price;
 
     @JsonProperty(value = "user_rating")
+    @OneToOne
     private ZomatoRating rating;
 
     private String cuisines;

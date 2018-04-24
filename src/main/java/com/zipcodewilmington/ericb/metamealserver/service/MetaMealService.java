@@ -11,14 +11,17 @@ import java.util.List;
 public class MetaMealService {
 
     private MetaMealRepository repo;
+    private ZomatoService zomatoService;
 
     @Autowired
-    public MetaMealService(MetaMealRepository repo){
+    public MetaMealService(MetaMealRepository repo, ZomatoService zomatoService){
         this.repo = repo;
+        this.zomatoService = zomatoService;
     }
 
     public List<MetaMealRestaurant> findRestaurants(String city, String state, String cuisine){
         return null;
     }
+
 
 }

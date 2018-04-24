@@ -21,10 +21,11 @@ public class MetaMealController {
         this.service = service;
     }
 
-   @RequestMapping(name = "/find/{city}/{state}/{cuisine}", method = RequestMethod.GET)
-    public ResponseEntity<?> getRestaurants(@PathVariable("city") String city, @PathVariable("state") String state,
+   @RequestMapping(value = "/find/{city}/{state}/{cuisine}", method = RequestMethod.GET)
+   public ResponseEntity<?> getRestaurants(@PathVariable("city") String city, @PathVariable("state") String state,
                                             @PathVariable("cuisine") String cuisine){
        return new ResponseEntity<>(service.findRestaurants(city,state,cuisine), HttpStatus.OK);
    }
+   
 
 }
