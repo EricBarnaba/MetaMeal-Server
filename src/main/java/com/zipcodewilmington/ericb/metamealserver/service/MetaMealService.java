@@ -14,15 +14,18 @@ public class MetaMealService {
 
     private MetaMealRepository repo;
     private ZomatoService zomatoService;
+    private YelpService yelpService;
 
     @Autowired
-    public MetaMealService(MetaMealRepository repo, ZomatoService zomatoService){
+    public MetaMealService(MetaMealRepository repo, ZomatoService zomatoService, YelpService yelpService){
         this.repo = repo;
         this.zomatoService = zomatoService;
+        this.yelpService = yelpService;
     }
 
     public List<ZomatoRestaurant> findRestaurants(String city, String state, String cuisine) throws IOException{
-        return zomatoService.getRestaurants(city,state,cuisine);
+        return yelpService.getRestaurants(city,state,cuisine);
+        //return zomatoService.getRestaurants(city,state,cuisine);
     }
 
 

@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class YelpRestaurant {
     @Id
     private String id;
