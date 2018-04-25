@@ -58,6 +58,8 @@ public class ZomatoService {
                r.setPrice(n.path("average_cost_for_two").asInt());
                r.setLat(n.path("location").path("latitude").asDouble());
                r.setLon(n.path("location").path("longitude").asDouble());
+               r.setCity(n.path("location").path("city").asText());
+               r.setState(state);
                list.add(r);
                repo.save(r);
            }
