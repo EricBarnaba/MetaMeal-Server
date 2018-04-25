@@ -6,6 +6,7 @@ import com.zipcodewilmington.ericb.metamealserver.repository.MetaMealRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -20,7 +21,7 @@ public class MetaMealService {
         this.zomatoService = zomatoService;
     }
 
-    public List<ZomatoRestaurant> findRestaurants(String city, String state, String cuisine){
+    public List<ZomatoRestaurant> findRestaurants(String city, String state, String cuisine) throws IOException{
         return zomatoService.getRestaurants(city,state,cuisine);
     }
 

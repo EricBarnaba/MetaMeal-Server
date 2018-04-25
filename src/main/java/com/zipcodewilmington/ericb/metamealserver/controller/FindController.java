@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
-public class MetaMealController {
+public class FindController {
 
 
     private MetaMealService service;
@@ -22,14 +24,19 @@ public class MetaMealController {
 
 
     @Autowired
-    public MetaMealController(MetaMealService service){
+    public FindController(MetaMealService service){
         this.service = service;
     }
 
    @RequestMapping(value = "/find/{city}/{state}/{cuisine}", method = RequestMethod.GET)
    public ResponseEntity<?> getRestaurants(@PathVariable("city") String city, @PathVariable("state") String state,
                                             @PathVariable("cuisine") String cuisine){
-       return new ResponseEntity<>(service.findRestaurants(city,state,cuisine), HttpStatus.OK);
+       try {
+           return new ResponseEntity<>(service.findRestaurants(city, state, cuisine), HttpStatus.OK);
+       }
+       catch(IOException ioe){
+           return new ResponseEntity<>(ioe.getMessage(), HttpStatus.BAD_REQUEST);
+       }
    }
 
 //    @RequestMapping(value = "/test/{city}/{state}", method = RequestMethod.GET)

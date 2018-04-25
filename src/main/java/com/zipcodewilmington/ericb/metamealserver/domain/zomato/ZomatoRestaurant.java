@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class ZomatoRestaurant {
@@ -14,7 +15,7 @@ public class ZomatoRestaurant {
     private Long id;
     private String name;
     private String address;
-    private Integer price;
+    private String price;
     private Double averageRating;
     private Integer numberOfRatings;
     private String cuisines;
@@ -29,6 +30,14 @@ public class ZomatoRestaurant {
 
     public void setNumberOfRatings(Integer numberOfRatings) {
         this.numberOfRatings = numberOfRatings;
+    }
+
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    public Integer getNumberOfRatings() {
+        return numberOfRatings;
     }
 
     public String getCity() {
@@ -80,12 +89,12 @@ public class ZomatoRestaurant {
         this.name = name;
     }
 
-    public Integer getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
-        this.price = price;
+    public void setPrice(String price) {
+        this.price = price.equals("0") ?  "N/A" : "$"+price;
     }
 
     public String getCuisines() {
@@ -104,4 +113,27 @@ public class ZomatoRestaurant {
         this.address = address;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ZomatoRestaurant that = (ZomatoRestaurant) o;
+        return Objects.equals(getId(), that.getId()) &&
+                Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getAddress(), that.getAddress()) &&
+                Objects.equals(getPrice(), that.getPrice()) &&
+                Objects.equals(getAverageRating(), that.getAverageRating()) &&
+                Objects.equals(getNumberOfRatings(), that.getNumberOfRatings()) &&
+                Objects.equals(getCuisines(), that.getCuisines()) &&
+                Objects.equals(getLat(), that.getLat()) &&
+                Objects.equals(getLon(), that.getLon()) &&
+                Objects.equals(getCity(), that.getCity()) &&
+                Objects.equals(getState(), that.getState());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getId(), getName(), getAddress(), getPrice(), getAverageRating(), getNumberOfRatings(), getCuisines(), getLat(), getLon(), getCity(), getState());
+    }
 }
