@@ -10,6 +10,10 @@ import javax.persistence.Id;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class YelpRestaurant {
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
+    private String name;
+    private Integer reviewCount;
+    private Double rating;
+    private String phoneNumber;
+    private String address;
 }
