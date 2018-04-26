@@ -42,8 +42,9 @@ public class MetaMealService {
         List<ZomatoRestaurant> zomatoList = zomatoService.getRestaurants(city,state,cuisine);
         List<MetaMealRestaurant> metaList =  mergeLists(yelpList,zomatoList);
         Search search = sRepo.findByCityAndStateAndCuisine(city,state,cuisine);
-        search.setResults(metaList);
         Collections.sort(metaList, Comparator.comparing(MetaMealRestaurant::getRating).reversed());
+        search.setResults(metaList);
+        sRepo.save(search);
         return metaList;
     }
 
