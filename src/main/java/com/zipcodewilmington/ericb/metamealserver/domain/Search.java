@@ -3,18 +3,37 @@ package com.zipcodewilmington.ericb.metamealserver.domain;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Search {
     @Id
     @GeneratedValue
     private Long id;
-
     private String city;
-
     private String state;
-
     private String cuisine;
+    @OneToMany
+    private List<MetaMealRestaurant> results;
+
+    public Search(String city, String state, String cuisine) {
+        this.city = city;
+        this.state = state;
+        this.cuisine = cuisine;
+        this.results = new ArrayList<>();
+    }
+
+    public Search(){}
+
+    public List<MetaMealRestaurant> getResults() {
+        return results;
+    }
+
+    public void setResults(List<MetaMealRestaurant> results) {
+        this.results = results;
+    }
 
     public Long getId() {
         return id;
