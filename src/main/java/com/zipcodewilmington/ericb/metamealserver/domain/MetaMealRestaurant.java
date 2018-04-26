@@ -1,11 +1,10 @@
 package com.zipcodewilmington.ericb.metamealserver.domain;
 
+import com.zipcodewilmington.ericb.metamealserver.domain.zomato.ZomatoRestaurant;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class MetaMealRestaurant {
@@ -16,8 +15,18 @@ public class MetaMealRestaurant {
     private String name;
     private String address;
     private String phoneNumber;
-    private int Rating;
+    private Integer rating;
     private String price;
+
+    public MetaMealRestaurant (YelpRestaurant yelp, ZomatoRestaurant zomato){
+        this.name = yelp.getName();
+        this.address = yelp.getAddress();
+        this.phoneNumber = yelp.getPhoneNumber();
+        this.rating = calculateMetaRating(yelp,zomato);
+        this.price = zomato.getPrice();
+    }
+
+    public MetaMealRestaurant(){};
 
     public String getName() {
         return name;
@@ -43,12 +52,12 @@ public class MetaMealRestaurant {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getRating() {
-        return Rating;
+    public Integer getRating() {
+        return rating;
     }
 
-    public void setRating(int rating) {
-        Rating = rating;
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 
     public String getPrice() {
@@ -66,4 +75,14 @@ public class MetaMealRestaurant {
     public void setId(Long id) {
         this.id = id;
     }
+
+    private Integer calculateMetaRating(YelpRestaurant yelp, ZomatoRestaurant zomato){
+        int totalReview = yelp.getReviewCount() + zomato.getNumberOfRatings();
+        double yelpRaw = yelp.getReviewCount() * (yelp.getRating()*20);
+        double zomatoRaw = (zomato.getAverageRating()*20) * zomato.getNumberOfRatings();
+        double totalRaw = yelpRaw + zomatoRaw;
+
+        return (int) (totalRaw/totalReview);
+    }
+
 }
