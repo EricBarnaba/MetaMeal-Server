@@ -13,9 +13,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 @Service
 public class ZomatoService {
@@ -37,15 +37,50 @@ public class ZomatoService {
 
     public List<ZomatoRestaurant> getRestaurants(String city, String state, String cuisine) throws IOException {
         List<ZomatoRestaurant> list = new ArrayList<>();
-        int pages = 0;
-        for (int i = 0; i <= pages*20; i+=20) {
-            String url = "https://developers.zomato.com/api/v2.1/search?entity_id=" + getLocationId(city, state) +
-                    "&entity_type=city&start=" + i + "&count=20&cuisines=" + getCuisineId(cuisine);
-            String rawJson = makeApiCall(url).getBody();
-            if(i==0) pages = calculateNumberOfPages(rawJson);
-            buildResaurantList(rawJson, list, state);
+        Integer locationId = getLocationId(city, state);
+        Integer cuisineId = getCuisineId(cuisine);
+        String firstUrl = "https://developers.zomato.com/api/v2.1/search?entity_id=" + locationId +
+                "&entity_type=city&start=" + 0 + "&count=20&cuisines=" + cuisineId;
+        String firstCall = makeApiCall(firstUrl).getBody();
+        buildResaurantList(firstCall, list, state);
+        int pages = calculateNumberOfPages(firstCall);
+        if (pages >= 1) {
+            List<String> results = makeThreadedCalls(pages, locationId, cuisineId);
+            for (String r : results) {
+                buildResaurantList(r, list, state);
+            }
+            return list;
+        } else return list;
+    }
+
+    private List<String> makeThreadedCalls(Integer pages, Integer locationId, Integer cuisineId) {
+        List<String> results = new ArrayList<>();
+        List<Thread> threads = new ArrayList<>();
+        for (int i = 20; i <= pages * 20; i += 20) {
+            String url = "https://developers.zomato.com/api/v2.1/search?entity_id=" + locationId +
+                    "&entity_type=city&start=" + i + "&count=20&cuisines=" + cuisineId;
+            FutureTask<String> call = new FutureTask<>(new ApiThreader(headers, url));
+            Thread t = new Thread(call);
+            threads.add(t);
+            t.start();
+            try {
+                synchronized (this) {
+                    results.add(call.get());
+                }
+            } catch (InterruptedException | ExecutionException ex) {
+                System.out.println(ex.getMessage());
+                return null;
+            }
+
         }
-        return list;
+        for (Thread t : threads) {
+            try {
+                t.join();
+            } catch (InterruptedException ie) {
+                System.out.println(ie.getMessage());
+            }
+        }
+        return results;
     }
 
     private ResponseEntity<String> makeApiCall(String url) {
@@ -63,6 +98,7 @@ public class ZomatoService {
         String url = "https://developers.zomato.com/api/v2.1/cities?q=" + city + "%20" + state + "&count=1";
         String rawJson = makeApiCall(url).getBody();
         return mapper.readTree(rawJson).path("location_suggestions").path(0).path("id").asInt();
+
     }
 
     private ZomatoRestaurant buildRestaurant(JsonNode node, String state) {
