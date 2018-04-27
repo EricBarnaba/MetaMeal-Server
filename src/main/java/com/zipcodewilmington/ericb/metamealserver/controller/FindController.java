@@ -1,8 +1,6 @@
 package com.zipcodewilmington.ericb.metamealserver.controller;
 
-import com.zipcodewilmington.ericb.metamealserver.config.ApiKeys;
 import com.zipcodewilmington.ericb.metamealserver.service.MetaMealService;
-import com.zipcodewilmington.ericb.metamealserver.service.ZomatoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

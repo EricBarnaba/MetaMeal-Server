@@ -1,4 +1,4 @@
-package com.zipcodewilmington.ericb.metamealserver.service;
+package com.zipcodewilmington.ericb.metamealserver.service.Zomato;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,6 +6,7 @@ import com.zipcodewilmington.ericb.metamealserver.config.ApiKeys;
 import com.zipcodewilmington.ericb.metamealserver.domain.zomato.CuisineMap;
 import com.zipcodewilmington.ericb.metamealserver.domain.zomato.ZomatoRestaurant;
 import com.zipcodewilmington.ericb.metamealserver.repository.ZomatoRepository;
+import com.zipcodewilmington.ericb.metamealserver.service.ApiThreader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
