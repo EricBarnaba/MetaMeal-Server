@@ -1,5 +1,6 @@
 package com.zipcodewilmington.ericb.metamealserver.service;
 
+import com.zipcodewilmington.ericb.metamealserver.Exception.CuisineNotFoundException;
 import com.zipcodewilmington.ericb.metamealserver.domain.MetaMealRestaurant;
 import com.zipcodewilmington.ericb.metamealserver.domain.Search;
 import com.zipcodewilmington.ericb.metamealserver.domain.YelpRestaurant;
@@ -40,7 +41,7 @@ public class MetaMealService {
         this.yRepo = yRepo;
     }
 
-    public List<MetaMealRestaurant> findRestaurants(String city, String state, String cuisine) throws IOException {
+    public List<MetaMealRestaurant> findRestaurants(String city, String state, String cuisine) throws IOException, CuisineNotFoundException {
         if (isSavedSearch(city, state, cuisine)) {
             return sRepo.findByCityAndStateAndCuisine(city, state, cuisine).getResults();
         }

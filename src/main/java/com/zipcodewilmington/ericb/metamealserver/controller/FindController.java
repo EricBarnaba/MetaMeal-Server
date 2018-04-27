@@ -1,5 +1,6 @@
 package com.zipcodewilmington.ericb.metamealserver.controller;
 
+import com.zipcodewilmington.ericb.metamealserver.Exception.CuisineNotFoundException;
 import com.zipcodewilmington.ericb.metamealserver.service.MetaMealService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ public class FindController {
 
     private MetaMealService service;
 
+
 //    @Autowired
 //    private ZomatoService test;
 
@@ -32,8 +34,8 @@ public class FindController {
        try {
            return new ResponseEntity<>(service.findRestaurants(city, state, cuisine), HttpStatus.OK);
        }
-       catch(IOException ioe){
-           return new ResponseEntity<>(ioe.getMessage(), HttpStatus.BAD_REQUEST);
+       catch(IOException | CuisineNotFoundException ex){
+           return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
        }
    }
 

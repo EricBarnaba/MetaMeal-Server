@@ -2,6 +2,7 @@ package com.zipcodewilmington.ericb.metamealserver.service.Zomato;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zipcodewilmington.ericb.metamealserver.Exception.CuisineNotFoundException;
 import com.zipcodewilmington.ericb.metamealserver.config.ApiKeys;
 import com.zipcodewilmington.ericb.metamealserver.domain.zomato.CuisineMap;
 import com.zipcodewilmington.ericb.metamealserver.domain.zomato.ZomatoRestaurant;
@@ -36,7 +37,7 @@ public class ZomatoService {
         headers.set("user-key", keys.getZomatoKey());
     }
 
-    public List<ZomatoRestaurant> getRestaurants(String city, String state, String cuisine) throws IOException {
+    public List<ZomatoRestaurant> getRestaurants(String city, String state, String cuisine) throws IOException, CuisineNotFoundException {
         List<ZomatoRestaurant> list = new ArrayList<>();
         Integer locationId = getLocationId(city, state);
         Integer cuisineId = getCuisineId(cuisine);
@@ -82,7 +83,8 @@ public class ZomatoService {
     }
 
 
-    private Integer getCuisineId(String cuisine) {
+    private Integer getCuisineId(String cuisine) throws CuisineNotFoundException {
+        if(!map.getMap().containsKey(cuisine)) throw new CuisineNotFoundException();
         return map.getMap().get(cuisine);
     }
 
