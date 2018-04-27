@@ -1,10 +1,11 @@
-package com.zipcodewilmington.ericb.metamealserver.service;
+package com.zipcodewilmington.ericb.metamealserver.service.Yelp;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zipcodewilmington.ericb.metamealserver.config.ApiKeys;
 import com.zipcodewilmington.ericb.metamealserver.domain.YelpRestaurant;
 import com.zipcodewilmington.ericb.metamealserver.repository.YelpRepository;
+import com.zipcodewilmington.ericb.metamealserver.service.ApiThreader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

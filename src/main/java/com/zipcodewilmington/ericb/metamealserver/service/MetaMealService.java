@@ -7,6 +7,8 @@ import com.zipcodewilmington.ericb.metamealserver.domain.zomato.ZomatoRestaurant
 import com.zipcodewilmington.ericb.metamealserver.repository.MetaMealRepository;
 import com.zipcodewilmington.ericb.metamealserver.repository.SearchRepository;
 import com.zipcodewilmington.ericb.metamealserver.repository.YelpRepository;
+import com.zipcodewilmington.ericb.metamealserver.service.Yelp.YelpService;
+import com.zipcodewilmington.ericb.metamealserver.service.Zomato.ZomatoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
