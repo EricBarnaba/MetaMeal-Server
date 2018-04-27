@@ -42,12 +42,12 @@ public class ZomatoService {
         String firstUrl = "https://developers.zomato.com/api/v2.1/search?entity_id=" + locationId +
                 "&entity_type=city&start=" + 0 + "&count=20&cuisines=" + cuisineId;
         String firstCall = makeApiCall(firstUrl).getBody();
-        buildResaurantList(firstCall, list, state);
+        buildRestaurantList(firstCall, list, state);
         int pages = calculateNumberOfPages(firstCall);
         if (pages >= 1) {
             List<String> results = makeThreadedCalls(pages, locationId, cuisineId);
             for (String r : results) {
-                buildResaurantList(r, list, state);
+                buildRestaurantList(r, list, state);
             }
             return list;
         } else return list;
@@ -55,13 +55,11 @@ public class ZomatoService {
 
     private List<String> makeThreadedCalls(Integer pages, Integer locationId, Integer cuisineId) {
         List<String> results = new ArrayList<>();
-        List<Thread> threads = new ArrayList<>();
         for (int i = 20; i <= pages * 20; i += 20) {
             String url = "https://developers.zomato.com/api/v2.1/search?entity_id=" + locationId +
                     "&entity_type=city&start=" + i + "&count=20&cuisines=" + cuisineId;
             FutureTask<String> call = new FutureTask<>(new ApiThreader(headers, url));
             Thread t = new Thread(call);
-            threads.add(t);
             t.start();
             try {
                 synchronized (this) {
@@ -72,13 +70,6 @@ public class ZomatoService {
                 return null;
             }
 
-        }
-        for (Thread t : threads) {
-            try {
-                t.join();
-            } catch (InterruptedException ie) {
-                System.out.println(ie.getMessage());
-            }
         }
         return results;
     }
@@ -123,7 +114,7 @@ public class ZomatoService {
         return results / 20 > 4 ? 4 : results / 20;
     }
 
-    private void buildResaurantList(String rawJson, List<ZomatoRestaurant> list, String state) throws IOException {
+    private void buildRestaurantList(String rawJson, List<ZomatoRestaurant> list, String state) throws IOException {
         JsonNode fullResponse = mapper.readTree(rawJson);
         JsonNode restaurants = fullResponse.path("restaurants");
         for (JsonNode node : restaurants) {

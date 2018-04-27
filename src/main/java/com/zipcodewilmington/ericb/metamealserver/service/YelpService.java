@@ -16,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 @Service
 public class YelpService {
@@ -34,15 +36,39 @@ public class YelpService {
 
     public List<YelpRestaurant> getRestaurants(String city, String state, String cuisine) throws IOException {
         List<YelpRestaurant> list = new ArrayList<>();
-        int pages = 0;
-        for(int i = 0; i<=pages*50; i+=50){
+        String firstUrl =  "https://api.yelp.com/v3/businesses/search?location=" + city + "," + state + "&term=" + cuisine +
+                "&limit=50&offset=" + 0;
+        String firstCall = makeApiCall(firstUrl).getBody();
+        buildRestaurantList(firstCall, list);
+        int pages = calculateNumberOfPages(firstCall);
+        if (pages >= 1) {
+            List<String> results = makeThreadedCalls(pages, city, state,cuisine);
+            for (String r : results) {
+                buildRestaurantList(r, list);
+            }
+            return list;
+        } else return list;
+    }
+
+    private List<String> makeThreadedCalls(Integer pages, String city, String state, String cuisine) {
+        List<String> results = new ArrayList<>();
+        for (int i = 50; i <= pages * 50; i += 50) {
             String url = "https://api.yelp.com/v3/businesses/search?location=" + city + "," + state + "&term=" + cuisine +
                     "&limit=50&offset=" + i;
-            String rawJson = makeApiCall(url).getBody();
-            if(i==0) pages = calculateNumberOfPages(rawJson);
-            buildRestaurantList(rawJson,list);
+            FutureTask<String> call = new FutureTask<>(new ApiThreader(headers, url));
+            Thread t = new Thread(call);
+            t.start();
+            try {
+                synchronized (this) {
+                    results.add(call.get());
+                }
+            } catch (InterruptedException | ExecutionException ex) {
+                System.out.println(ex.getMessage());
+                return null;
+            }
+
         }
-        return list;
+        return results;
     }
 
     private ResponseEntity<String> makeApiCall(String url) {
