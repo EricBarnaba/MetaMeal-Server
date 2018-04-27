@@ -37,9 +37,10 @@ public class ZomatoService {
 
     public List<ZomatoRestaurant> getRestaurants(String city, String state, String cuisine) throws IOException {
         List<ZomatoRestaurant> list = new ArrayList<>();
+        Integer location = getLocationId(city, state);
         int pages = 0;
         for (int i = 0; i <= pages*20; i+=20) {
-            String url = "https://developers.zomato.com/api/v2.1/search?entity_id=" + getLocationId(city, state) +
+            String url = "https://developers.zomato.com/api/v2.1/search?entity_id=" + location  +
                     "&entity_type=city&start=" + i + "&count=20&cuisines=" + getCuisineId(cuisine);
             String rawJson = makeApiCall(url).getBody();
             if(i==0) pages = calculateNumberOfPages(rawJson);
