@@ -1,6 +1,6 @@
 package com.zipcodewilmington.ericb.metamealserver.service;
 
-import com.zipcodewilmington.ericb.metamealserver.Exception.CuisineNotFoundException;
+import com.zipcodewilmington.ericb.metamealserver.exception.CuisineNotFoundException;
 import com.zipcodewilmington.ericb.metamealserver.domain.MetaMealRestaurant;
 import com.zipcodewilmington.ericb.metamealserver.domain.Search;
 import com.zipcodewilmington.ericb.metamealserver.domain.YelpRestaurant;

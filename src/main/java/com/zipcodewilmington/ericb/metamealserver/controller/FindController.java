@@ -1,6 +1,6 @@
 package com.zipcodewilmington.ericb.metamealserver.controller;
 
-import com.zipcodewilmington.ericb.metamealserver.Exception.CuisineNotFoundException;
+import com.zipcodewilmington.ericb.metamealserver.exception.CuisineNotFoundException;
 import com.zipcodewilmington.ericb.metamealserver.service.MetaMealService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
